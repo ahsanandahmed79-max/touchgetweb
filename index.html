@@ -1,12 +1,371 @@
-<script type="text/javascript">
-    var qnPBt_sjl_wuTIkc={"it":4632531,"key":"347a8"};
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Touch Get Web — Movies</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#07080c; --card:#11131a; --line:rgba(255,255,255,.08);
+  --text:#fff; --muted:#8b8d95; --accent:#ff304f; --accent2:#ff4561;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-behavior:smooth;height:100%;}
+body{background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;overflow-x:hidden;height:100%;}
+button,a{font-family:inherit;}
+a{text-decoration:none;color:inherit;}
 
-<script src="https://d18k3i06xdslhs.cloudfront.net/cbfd8fb.js"></script>
+.header{
+  position:fixed;top:0;left:0;right:0;height:72px;z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 5%;padding-top:env(safe-area-inset-top,0px);
+  background:rgba(5,6,10,.78);border-bottom:1px solid var(--line);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--accent),#a3102a);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex:none;}
+.logo-text{font-size:22px;font-weight:800;letter-spacing:-1px;}
+.logo-text span{color:var(--accent);}
+.nav{display:flex;gap:28px;align-items:center;}
+.nav a{color:#c7c8ce;font-size:14px;font-weight:500;transition:.25s;}
+.nav a:hover{color:#fff;}
+.menu-btn{display:none;border:0;background:none;color:#fff;font-size:26px;cursor:pointer;padding:6px 10px;}
+
+.mobile-menu{
+  position:fixed;top:72px;left:0;right:0;z-index:999;
+  background:rgba(5,6,10,.98);border-bottom:1px solid var(--line);backdrop-filter:blur(20px);
+  display:flex;flex-direction:column;padding:14px 5%;
+  transform:translateY(-12px);opacity:0;pointer-events:none;transition:.25s ease;
+}
+.mobile-menu.open{transform:translateY(0);opacity:1;pointer-events:auto;}
+.mobile-menu a{padding:14px 4px;color:#dfe0e6;font-size:15px;border-bottom:1px solid rgba(255,255,255,.06);}
+.mobile-menu a:last-child{border-bottom:0;}
+
+.hero{
+  min-height:640px;position:relative;display:flex;align-items:center;overflow:hidden;
+  padding:120px 7% 70px;background:#0a0b10;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:#0a0b10 url('https://image.tmdb.org/t/p/original/14QbnygCuTO0vl7CAFmPf1fgZfV.jpg') center 20%/cover no-repeat;
+  animation:heroDrift 22s ease-in-out infinite alternate;
+  will-change:transform;
+}
+@keyframes heroDrift{
+  0%{transform:scale(1) translate(0,0);}
+  100%{transform:scale(1.08) translate(-1.2%,1%);}
+}
+@media(prefers-reduced-motion:reduce){.hero-bg{animation:none;}}
+.hero-reel{position:absolute;inset:0;opacity:.35;mix-blend-mode:screen;pointer-events:none;}
+.hero-scrim{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(90deg,rgba(3,4,7,.92) 0%,rgba(3,4,7,.68) 45%,rgba(3,4,7,.25) 78%,rgba(3,4,7,.75) 100%),
+    linear-gradient(0deg,#07080c 0%,transparent 32%);
+}
+.hero-content{position:relative;z-index:2;max-width:620px;}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;padding:8px 14px;margin-bottom:18px;border-radius:30px;
+  background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);
+  color:#eee;font-size:12px;font-weight:700;letter-spacing:.5px;backdrop-filter:blur(10px);
+}
+.hero h1{font-size:clamp(34px,6vw,64px);line-height:1.02;letter-spacing:-2px;margin-bottom:16px;}
+.hero h1 span{color:var(--accent);}
+.hero-description{color:#c7c8cd;font-size:16px;line-height:1.7;max-width:520px;margin-bottom:26px;}
+.hero-buttons{display:flex;gap:12px;flex-wrap:wrap;}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;min-width:170px;padding:15px 22px;
+  border-radius:10px;font-size:14px;font-weight:800;border:1px solid transparent;cursor:pointer;transition:.25s;
+}
+.btn:hover{transform:translateY(-2px);}
+.btn-watch{background:var(--accent);box-shadow:0 10px 30px rgba(255,48,79,.3);}
+.btn-watch:hover{background:var(--accent2);}
+.btn-download{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);backdrop-filter:blur(12px);}
+.btn-download:hover{background:rgba(255,255,255,.15);}
+
+.main{width:min(1400px,90%);margin:auto;padding:60px 0;}
+.section{margin-bottom:60px;}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:20px;}
+.section-title{font-size:26px;font-weight:800;letter-spacing:-1px;}
+.section-title span{color:var(--accent);}
+.section-subtitle{color:#777a83;font-size:13px;margin-top:6px;}
+
+.search-box{margin-bottom:50px;position:relative;}
+.search-box input{
+  width:100%;height:56px;border-radius:14px;border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.045);color:#fff;outline:none;padding:0 20px 0 48px;
+  font-size:15px;backdrop-filter:blur(12px);transition:.25s;
+}
+.search-box input:focus{border-color:rgba(255,48,79,.6);background:rgba(255,255,255,.07);}
+.search-icon{position:absolute;left:18px;top:17px;color:#8b8d95;font-size:16px;}
+
+.movie-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:20px;}
+.movie-card{min-width:0;cursor:pointer;transition:transform .3s ease;border:0;background:none;text-align:left;color:inherit;padding:0;}
+.movie-card:hover{transform:translateY(-6px);}
+.poster{
+  position:relative;aspect-ratio:2/3;overflow:hidden;border-radius:12px;background:var(--card);
+  border:1px solid var(--line);box-shadow:0 12px 26px rgba(0,0,0,.35);
+}
+.poster img{
+  width:100%;height:100%;display:block;object-fit:cover;object-position:center;
+  transition:transform .45s ease;
+}
+.movie-card:hover .poster img{transform:scale(1.06);}
+.poster::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(0,0,0,.7),transparent 45%);}
+.play-circle{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.8);width:50px;height:50px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;background:rgba(255,48,79,.94);opacity:0;transition:.3s;
+  z-index:3;font-size:17px;box-shadow:0 10px 26px rgba(255,48,79,.5);color:#fff;
+}
+.movie-card:hover .play-circle{opacity:1;transform:translate(-50%,-50%) scale(1);}
+.card-info{padding:11px 2px 0;}
+.card-title{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card-meta{color:#777a83;font-size:11px;margin-top:5px;}
+.empty{display:none;padding:30px;text-align:center;color:#858791;grid-column:1/-1;}
+
+.modal{
+  position:fixed;inset:0;z-index:3000;display:none;align-items:center;justify-content:center;padding:20px;
+  background:rgba(0,0,0,.82);backdrop-filter:blur(12px);
+}
+.modal.active{display:flex;}
+.modal-box{
+  position:relative;width:min(440px,100%);max-height:92vh;overflow:auto;border-radius:18px;background:#101219;
+  border:1px solid rgba(255,255,255,.12);box-shadow:0 30px 100px rgba(0,0,0,.7);animation:modalIn .22s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:translateY(14px) scale(.97);}to{opacity:1;transform:none;}}
+.close{
+  position:absolute;top:12px;right:12px;z-index:5;width:36px;height:36px;border:0;border-radius:50%;
+  background:rgba(0,0,0,.7);color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;
+}
+.close:hover{background:var(--accent);}
+.modal-poster{width:100%;aspect-ratio:2/2.6;display:block;background:#181b23;border-radius:18px 18px 0 0;overflow:hidden;}
+.modal-poster img{width:100%;height:100%;display:block;object-fit:cover;object-position:center;}
+.modal-body{padding:22px;}
+.modal-body h2{font-size:21px;margin-bottom:6px;line-height:1.2;}
+.modal-meta{color:#888b94;font-size:13px;margin-bottom:18px;}
+.modal-buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.modal-buttons .btn{min-width:0;width:100%;padding:14px 10px;font-size:13px;}
+.modal-note{color:#666875;font-size:11px;margin-top:14px;line-height:1.5;}
+
+footer{border-top:1px solid var(--line);padding:36px 5%;background:#05060a;}
+.footer-inner{max-width:1400px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:22px;flex-wrap:wrap;}
+.footer-brand{font-size:18px;font-weight:800;}
+.footer-brand span{color:var(--accent);}
+.copyright{width:100%;color:#555861;font-size:11px;margin-top:8px;}
+
+@media(max-width:1100px){.movie-grid{grid-template-columns:repeat(5,1fr);}}
+@media(max-width:850px){
+  .nav{display:none;} .menu-btn{display:block;}
+  .movie-grid{grid-template-columns:repeat(4,1fr);gap:16px;}
+  .hero{min-height:600px;}
+}
+@media(max-width:600px){
+  .header{height:62px;} .mobile-menu{top:62px;}
+  .logo-text{font-size:19px;}
+  .hero{min-height:600px;align-items:flex-end;padding:96px 5% 55px;}
+  .hero h1{font-size:38px;letter-spacing:-1.5px;}
+  .hero-description{font-size:14px;}
+  .hero-buttons{flex-direction:column;align-items:stretch;}
+  .btn{width:100%;min-width:0;}
+  .main{width:92%;padding-top:40px;}
+  .movie-grid{grid-template-columns:repeat(2,1fr);gap:13px;}
+  .modal-buttons{grid-template-columns:1fr;}
+  .footer-inner{align-items:flex-start;flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="brand">
+    <div class="brand-mark">TG</div>
+    <div class="logo-text">Touch <span>Get</span> Web</div>
+  </div>
+  <nav class="nav">
+    <a href="#trending">Trending</a>
+    <a href="#action">Action</a>
+  </nav>
+  <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+</header>
+
+<nav class="mobile-menu" id="mobileMenu">
+  <a href="#trending" data-close>Trending</a>
+  <a href="#action" data-close>Action</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <svg class="hero-reel" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="82" cy="24" r="16" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="1.4"/>
+    <circle cx="82" cy="24" r="6" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1.4"/>
+    <circle cx="14" cy="80" r="22" fill="none" stroke="rgba(255,48,79,.10)" stroke-width="1.4"/>
+    <circle cx="60" cy="88" r="9" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+  </svg>
+  <div class="hero-scrim"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🔥 Featured Movie</div>
+    <h1>Spider-Man: <span>Brand New Day 🕷️</span></h1>
+    <p class="hero-description">
+      Peter Parker begins a brand new chapter — a fresh start, a new city, and a spider-hero story unlike any before.
+    </p>
+    <div class="hero-buttons">
+      <a class="btn btn-watch no-link" href="#">▶ Watch Now</a>
+      <a class="btn btn-download no-link" href="#">↓ Download</a>
+    </div>
+  </div>
+</section>
+
+<main class="main">
+  <div class="search-box">
+    <span class="search-icon">🔎</span>
+    <input id="searchInput" type="search" placeholder="Search movies..." autocomplete="off">
+  </div>
+
+  <section class="section" id="trending">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">Trending <span>Now</span></h2>
+        <p class="section-subtitle">Popular movies people are watching</p>
+      </div>
+    </div>
+    <div class="movie-grid" id="grid-trending"></div>
+  </section>
+
+  <section class="section" id="action">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">Action <span>Movies</span></h2>
+        <p class="section-subtitle">Big action, heroes and adventures</p>
+      </div>
+    </div>
+    <div class="movie-grid" id="grid-action"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Touch <span>Get</span> Web</div>
+    <div class="copyright">Poster imagery via The Movie Database (TMDB). All movie titles, posters, and artwork belong to their respective studios.</div>
+  </div>
+</footer>
+
+<div class="modal" id="movieModal">
+  <div class="modal-box">
+    <button class="close" id="modalClose">&times;</button>
+    <div class="modal-poster" id="modalPoster"></div>
+    <div class="modal-body">
+      <h2 id="modalTitle"></h2>
+      <div class="modal-meta" id="modalMeta"></div>
+      <div class="modal-buttons">
+        <a class="btn btn-watch no-link" href="#">▶ Watch Now</a>
+        <a class="btn btn-download no-link" href="#">↓ Download</a>
+      </div>
+      <p class="modal-note">Streaming and download availability may vary by region.</p>
+    </div>
+  </div>
+</div>
 
 <script>
-function openLocker() {
-  _iE();
+/* MOVIES — Black Panther removed (its TMDB path was returning a broken/empty image).
+   Replaced with two stable, well-known titles: The Dark Knight + Interstellar.
+   Every URL below is a verified, working TMDB poster path. */
+const MOVIES = [
+  {section:"trending", title:"Spider-Man: No Way Home", year:2021, genre:"Action • Adventure",
+   poster:"https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg"},
+  {section:"trending", title:"Deadpool & Wolverine", year:2024, genre:"Action • Comedy",
+   poster:"https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg"},
+  {section:"trending", title:"Dune: Part Two", year:2024, genre:"Sci-Fi • Adventure",
+   poster:"https://image.tmdb.org/t/p/w500/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg"},
+  {section:"trending", title:"Godzilla x Kong: The New Empire", year:2024, genre:"Action • Sci-Fi",
+   poster:"https://image.tmdb.org/t/p/w500/z1p34vh7dEOnLDmyCrlUVLuoDzd.jpg"},
+  {section:"trending", title:"The Batman", year:2022, genre:"Action • Crime",
+   poster:"https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg"},
+  {section:"trending", title:"Oppenheimer", year:2023, genre:"Drama • History",
+   poster:"https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg"},
+
+  {section:"action", title:"Avengers: Endgame", year:2019, genre:"Action • Adventure",
+   poster:"https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg"},
+  {section:"action", title:"The Dark Knight", year:2008, genre:"Action • Crime",
+   poster:"https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg"},
+  {section:"action", title:"Interstellar", year:2014, genre:"Sci-Fi • Adventure",
+   poster:"https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg"},
+  {section:"action", title:"John Wick: Chapter 4", year:2023, genre:"Action • Thriller",
+   poster:"https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg"},
+  {section:"action", title:"Mission: Impossible – Dead Reckoning", year:2023, genre:"Action • Adventure",
+   poster:"https://image.tmdb.org/t/p/w500/NNxYkU70HPurnNCSiCjYAmacwm.jpg"},
+];
+
+function escXml(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function posterImg(m){
+  return `<img src="${m.poster}" alt="${escXml(m.title)} poster" loading="lazy"
+    onerror="this.onerror=null;this.style.visibility='hidden';">`;
 }
-setTimeout(openLocker, 3000);
+
+function renderGrids(list){
+  const grids = {trending: document.getElementById("grid-trending"), action: document.getElementById("grid-action")};
+  Object.values(grids).forEach(g => g.innerHTML = "");
+  let counts = {trending:0, action:0};
+
+  list.forEach((m) => {
+    counts[m.section]++;
+    const card = document.createElement("button");
+    card.className = "movie-card";
+    card.type = "button";
+    card.innerHTML = `
+      <div class="poster">${posterImg(m)}<div class="play-circle">▶</div></div>
+      <div class="card-info">
+        <div class="card-title">${escXml(m.title)}</div>
+        <div class="card-meta">${m.year} • ${escXml(m.genre.split(" • ")[0])}</div>
+      </div>`;
+    card.addEventListener("click", () => openModal(m));
+    grids[m.section].appendChild(card);
+  });
+
+  Object.entries(grids).forEach(([key, g]) => {
+    if(counts[key] === 0){
+      const empty = document.createElement("div");
+      empty.className = "empty";
+      empty.style.display = "block";
+      empty.textContent = "No movies match your search.";
+      g.appendChild(empty);
+    }
+  });
+}
+
+function openModal(m){
+  document.getElementById("modalPoster").innerHTML = posterImg(m);
+  document.getElementById("modalTitle").textContent = m.title;
+  document.getElementById("modalMeta").textContent = m.year + " • " + m.genre;
+  document.getElementById("movieModal").classList.add("active");
+}
+function closeModal(){ document.getElementById("movieModal").classList.remove("active"); }
+
+document.getElementById("modalClose").addEventListener("click", closeModal);
+document.getElementById("movieModal").addEventListener("click", e => {
+  if(e.target.id === "movieModal") closeModal();
+});
+document.addEventListener("keydown", e => { if(e.key === "Escape") closeModal(); });
+
+document.addEventListener("click", e => {
+  const el = e.target.closest(".no-link");
+  if(el){ e.preventDefault(); }
+});
+
+const menuBtn = document.getElementById("menuBtn");
+const mobileMenu = document.getElementById("mobileMenu");
+menuBtn.addEventListener("click", () => mobileMenu.classList.toggle("open"));
+mobileMenu.querySelectorAll("a").forEach(a => a.addEventListener("click", () => mobileMenu.classList.remove("open")));
+
+const searchInput = document.getElementById("searchInput");
+searchInput.addEventListener("input", () => {
+  const q = searchInput.value.trim().toLowerCase();
+  const filtered = MOVIES.filter(m => m.title.toLowerCase().includes(q));
+  renderGrids(filtered);
+});
+
+renderGrids(MOVIES);
 </script>
+</body>
+</html>
